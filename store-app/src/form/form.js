@@ -29,14 +29,35 @@ export const Form = () => {
     }
   }
 
+  const handleBlur = e => {
+    const {name, value} = e.target
+
+    setFormErrors({
+      ...formErrors,
+      [name]: value.length ? '' : `The ${name} is required`,
+    })
+  }
+
   return (
     <>
       <h1>Create product</h1>
 
       <form onSubmit={handleSubmit}>
-        <TextField label="name" id="name" helperText={formErrors.name} />
+        <TextField
+          label="name"
+          id="name"
+          name="name"
+          helperText={formErrors.name}
+          onBlur={handleBlur}
+        />
 
-        <TextField label="size" id="size" helperText={formErrors.size} />
+        <TextField
+          label="size"
+          id="size"
+          name="size"
+          helperText={formErrors.size}
+          onBlur={handleBlur}
+        />
 
         <InputLabel htmlFor="type">Type</InputLabel>
 
