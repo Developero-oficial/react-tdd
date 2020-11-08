@@ -5,7 +5,7 @@ import {Form} from './form'
 
 describe('when the form is mounted', () => {
   it('there must be a create product form page', () => {
-    beforeEach(() => render(<Form />))
+    render(<Form />)
     expect(
       screen.getByRole('heading', {name: /create product/i}),
     ).toBeInTheDocument()
