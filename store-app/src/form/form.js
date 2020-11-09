@@ -5,7 +5,11 @@ import Select from '@material-ui/core/Select'
 import Button from '@material-ui/core/Button'
 
 import {saveProduct} from '../services/productServices'
-import {CREATED_STATUS, ERROR_SERVER_STATUS} from '../consts/httpStatus'
+import {
+  CREATED_STATUS,
+  ERROR_SERVER_STATUS,
+  INVALID_REQUEST_STATUS,
+} from '../consts/httpStatus'
 
 export const Form = () => {
   const [isSaving, setIsSaving] = useState(false)
@@ -36,6 +40,17 @@ export const Form = () => {
     type: type.value,
   })
 
+  const handleFetchErrors = async err => {
+    if (err.status === ERROR_SERVER_STATUS) {
+      setErrorMessage('Unexpected error, please try again')
+    }
+
+    if (err.status === INVALID_REQUEST_STATUS) {
+      const data = await err.json()
+      setErrorMessage(data.message)
+    }
+  }
+
   const handleSubmit = async e => {
     e.preventDefault()
 
@@ -45,15 +60,19 @@ export const Form = () => {
 
     validateForm(getFormValues({name, size, type}))
 
-    const response = await saveProduct(getFormValues({name, size, type}))
+    try {
+      const response = await saveProduct(getFormValues({name, size, type}))
 
-    if (response.status === CREATED_STATUS) {
-      e.target.reset()
-      setIsSuccess(true)
-    }
+      if (!response.ok) {
+        throw response
+      }
 
-    if (response.status === ERROR_SERVER_STATUS) {
-      setErrorMessage('Unexpected error, please try again')
+      if (response.status === CREATED_STATUS) {
+        e.target.reset()
+        setIsSuccess(true)
+      }
+    } catch (err) {
+      handleFetchErrors(err)
     }
 
     setIsSaving(false)
