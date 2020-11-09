@@ -100,13 +100,17 @@ describe('when the user submits the form', () => {
   })
 
   it('the form page must display the success message “Product stored” and clean the fields values', async () => {
-    fireEvent.change(screen.getByLabelText(/name/i), {
+    const nameInput = screen.getByLabelText(/name/i)
+    const sizeInput = screen.getByLabelText(/size/i)
+    const typeSelect = screen.getByLabelText(/type/i)
+
+    fireEvent.change(nameInput, {
       target: {name: 'name', value: 'my product'},
     })
-    fireEvent.change(screen.getByLabelText(/size/i), {
+    fireEvent.change(sizeInput, {
       target: {name: 'name', value: '10'},
     })
-    fireEvent.change(screen.getByLabelText(/type/i), {
+    fireEvent.change(typeSelect, {
       target: {name: 'name', value: 'electronic'},
     })
 
@@ -115,5 +119,9 @@ describe('when the user submits the form', () => {
     await waitFor(() =>
       expect(screen.getByText(/product stored/i)).toBeInTheDocument(),
     )
+
+    expect(nameInput).toHaveValue('')
+    expect(sizeInput).toHaveValue('')
+    expect(typeSelect).toHaveValue('')
   })
 })
