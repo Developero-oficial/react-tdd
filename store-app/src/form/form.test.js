@@ -169,3 +169,21 @@ describe('when the user submits the form and the server returns an invalid reque
     )
   })
 })
+
+describe('when the user submits the form and the server returns an invalid request error', () => {
+  it('the form page must display the error message "The form is invalid, the fields [field1...fieldN] are required"', async () => {
+    server.use(
+      rest.post('/products', (req, res) =>
+        res.networkError('Failed to connect'),
+      ),
+    )
+
+    fireEvent.click(screen.getByRole('button', {name: /submit/i}))
+
+    await waitFor(() =>
+      expect(
+        screen.getByText(/connection error, please try later/i),
+      ).toBeInTheDocument(),
+    )
+  })
+})
