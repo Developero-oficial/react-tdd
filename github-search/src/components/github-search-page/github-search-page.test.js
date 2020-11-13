@@ -15,4 +15,8 @@ describe('when the GithubSearchPage is mounted', () => {
   it('must be an input text with label "filter by" field', () => {
     expect(screen.getByLabelText(/filter by/i)).toBeInTheDocument()
   })
+
+  it('must be a Search Button', () => {
+    expect(screen.getByRole('button', {name: /search/i})).toBeInTheDocument()
+  })
 })
