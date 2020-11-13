@@ -9,8 +9,7 @@ of inspiring me to be better professional.
 
 - The page should contain the next filters:
 
-  - An input text in order to filter by repository name. This is an optional
-    field in order to do the search.
+  - An input text with label "filter by" field in order to do the search.
   - The Search Button.
 
 - The results section should contain:
@@ -62,8 +61,8 @@ open source.
 
 - Debe haber una página de lista de repositorios de github.
 - La página debe contener los siguientes filtros:
-  - Un input text para filtrar por nombre de repositorio. Esta es un campo
-    opcional para realizar la búsqueda.
+  - Un input text para filtrar con label "filter by". Esta es un campo para
+    realizar la búsqueda.
 - La sección de resultados debe contener:
   - Antes de la primera búsqueda, muestre el mensaje de estado inicial
     "Proporcione una opción de búsqueda y haga clic en el botón de búsqueda ”.
