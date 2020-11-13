@@ -1,7 +1,9 @@
 import React from 'react'
 
+import {GithubSearchPage} from './components/github-search-page'
+
 function App() {
-  return <h1>Hello World :B</h1>
+  return <GithubSearchPage />
 }
 
 export default App
