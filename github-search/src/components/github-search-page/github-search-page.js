@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
 
 export const GithubSearchPage = () => (
   <Container>
@@ -22,6 +23,17 @@ export const GithubSearchPage = () => (
         </Button>
       </Grid>
     </Grid>
+
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      height={400}
+    >
+      <Typography>
+        Please provide a search option and click in the search button
+      </Typography>
+    </Box>
   </Container>
 )
 
