@@ -11,10 +11,17 @@ import {Content} from '../content'
 export const GithubSearchPage = () => {
   const [isSearching, setIsSearching] = useState(false)
   const [isSearchApplied, setIsSearchApplied] = useState(false)
+  const [reposList, setReposList] = useState([])
 
   const handleClick = async () => {
     setIsSearching(true)
-    await Promise.resolve()
+    const response = await fetch(
+      '/search/repositories?q=react+language:python&page=2&per_page=50',
+    )
+
+    const data = await response.json()
+
+    setReposList(data.items)
     setIsSearchApplied(true)
     setIsSearching(false)
   }
@@ -46,7 +53,7 @@ export const GithubSearchPage = () => {
       </Grid>
 
       <Box my={4}>
-        <Content isSearchApplied={isSearchApplied} />
+        <Content isSearchApplied={isSearchApplied} reposList={reposList} />
       </Box>
     </Container>
   )

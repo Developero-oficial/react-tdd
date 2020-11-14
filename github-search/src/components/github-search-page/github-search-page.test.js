@@ -129,20 +129,23 @@ describe('when the developer does a search', () => {
 
     const [repository, stars, forks, openIssues, updatedAt] = tableCells
 
-    expect(within(repository).getByRole('img', {name: /test/i}))
+    const avatarImg = within(repository).getByRole('img', {name: fakeRepo.name})
+    expect(avatarImg).toBeInTheDocument()
 
     expect(tableCells).toHaveLength(5)
 
-    expect(repository).toHaveTextContent(/test/i)
-    expect(stars).toHaveTextContent(/10/)
-    expect(forks).toHaveTextContent(/5/)
-    expect(openIssues).toHaveTextContent(/2/i)
-    expect(updatedAt).toHaveTextContent(/2020-01-01/i)
+    expect(repository).toHaveTextContent(fakeRepo.name)
+    expect(stars).toHaveTextContent(fakeRepo.stargazers_count)
+    expect(forks).toHaveTextContent(fakeRepo.forks_count)
+    expect(openIssues).toHaveTextContent(fakeRepo.open_issues_count)
+    expect(updatedAt).toHaveTextContent(fakeRepo.updated_at)
 
-    expect(withinTable.getByText(/test/i).closest('a')).toHaveAttribute(
+    expect(withinTable.getByText(fakeRepo.name).closest('a')).toHaveAttribute(
       'href',
-      'http://localhost:3000/test',
+      fakeRepo.html_url,
     )
+
+    expect(avatarImg).toHaveAttribute('src', fakeRepo.owner.avatar_url)
   })
 
   it('must display the total results number of the search and the current number of results', async () => {
