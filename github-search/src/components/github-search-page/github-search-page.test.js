@@ -83,12 +83,16 @@ describe('when the developer does a search', () => {
     expect(updatedAt).toHaveTextContent(/updated at/i)
   })
 
-  it('each table result must contain: name, stars, updated at, forks, open issues', async () => {
+  it('each table result must contain: owner avatar image, name, stars, updated at, forks, open issues', async () => {
     fireClickSearch()
 
     const table = await screen.findByRole('table')
 
-    const tableCells = within(table).getAllByRole('cell')
+    const withinTable = within(table)
+
+    const tableCells = withinTable.getAllByRole('cell')
+
+    expect(withinTable.getByRole('img', {name: /test/i}))
 
     expect(tableCells).toHaveLength(5)
 

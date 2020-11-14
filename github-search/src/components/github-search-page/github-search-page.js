@@ -22,7 +22,10 @@ export const GithubSearchPage = () => {
       <table>
         <thead>
           <tr>
-            <th>Repository</th>
+            <th>
+              <img alt="test" src="" />
+              Repository
+            </th>
             <th>Stars</th>
             <th>Forks</th>
             <th>Open issues</th>
