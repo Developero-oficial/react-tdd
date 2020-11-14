@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 
 import {Content} from '../content'
+import {getRepos} from '../../services'
 
 export const GithubSearchPage = () => {
   const [isSearching, setIsSearching] = useState(false)
@@ -15,9 +16,7 @@ export const GithubSearchPage = () => {
 
   const handleClick = async () => {
     setIsSearching(true)
-    const response = await fetch(
-      '/search/repositories?q=react+language:python&page=2&per_page=50',
-    )
+    const response = await getRepos()
 
     const data = await response.json()
 
