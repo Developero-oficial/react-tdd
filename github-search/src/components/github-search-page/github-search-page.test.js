@@ -41,4 +41,18 @@ describe('when the developer does a search', () => {
       expect(screen.getByRole('button', {name: /search/i})).not.toBeDisabled(),
     )
   })
+
+  it('the data should be displayed as a sticky table', async () => {
+    fireEvent.click(screen.getByRole('button', {name: /search/i}))
+
+    await waitFor(() =>
+      expect(
+        screen.queryByText(
+          /please provide a search option and click in the search button/i,
+        ),
+      ).not.toBeInTheDocument(),
+    )
+
+    expect(screen.getByRole('table')).toBeInTheDocument()
+  })
 })
