@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect, useCallback, useRef} from 'react'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
@@ -16,7 +16,9 @@ export const GithubSearchPage = () => {
   const [searchBy, setSearchBy] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(30)
 
-  const handleClick = async () => {
+  const didMount = useRef(false)
+
+  const handleSearch = useCallback(async () => {
     setIsSearching(true)
     const response = await getRepos({q: searchBy, rowsPerPage})
 
@@ -25,9 +27,18 @@ export const GithubSearchPage = () => {
     setReposList(data.items)
     setIsSearchApplied(true)
     setIsSearching(false)
-  }
+  }, [rowsPerPage, searchBy])
 
   const handleChange = ({target: {value}}) => setSearchBy(value)
+
+  useEffect(() => {
+    if (!didMount.current) {
+      didMount.current = true
+      return
+    }
+
+    handleSearch()
+  }, [handleSearch])
 
   return (
     <Container>
@@ -54,7 +65,7 @@ export const GithubSearchPage = () => {
             fullWidth
             color="primary"
             variant="contained"
-            onClick={handleClick}
+            onClick={handleSearch}
           >
             Search
           </Button>
