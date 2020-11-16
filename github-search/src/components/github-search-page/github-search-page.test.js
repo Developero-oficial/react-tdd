@@ -273,6 +273,9 @@ describe('when the developer does a search and selects 50 rows per page', () => 
     fireEvent.click(screen.getByRole('option', {name: '50'}))
 
     // expect 50 rows length
-    expect(await screen.findAllByRole('row')).toHaveLength(51)
+    await waitFor(() =>
+      expect(screen.getByRole('button', {name: /search/i})).not.toBeDisabled(),
+    )
+    expect(screen.getAllByRole('row')).toHaveLength(51)
   })
 })
