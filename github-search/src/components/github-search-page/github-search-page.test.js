@@ -274,25 +274,18 @@ describe('when the developer does a search and selects 50 rows per page', () => 
 
 describe('when the developer clicks on search and then on next page button', () => {
   it('must display the next repositories page', async () => {
-    // config server handler
     server.use(rest.get('/search/repositories', handlerPaginated))
 
-    // click search
     fireClickSearch()
 
-    // wait table
     expect(await screen.findByRole('table')).toBeInTheDocument()
 
-    // expect first repo name is from page 0
     expect(screen.getByRole('cell', {name: /1-0/})).toBeInTheDocument()
 
-    // expect next page is not disabled
     expect(screen.getByRole('button', {name: /next page/i})).not.toBeDisabled()
 
-    // click next page button
     fireEvent.click(screen.getByRole('button', {name: /next page/i}))
 
-    // wait search button is not disabled
     expect(screen.getByRole('button', {name: /search/i})).toBeDisabled()
 
     await waitFor(
@@ -303,7 +296,6 @@ describe('when the developer clicks on search and then on next page button', () 
       {timeout: 3000},
     )
 
-    // expect first repo name is from page 1
     expect(screen.getByRole('cell', {name: /2-0/})).toBeInTheDocument()
   }, 10000)
 })
