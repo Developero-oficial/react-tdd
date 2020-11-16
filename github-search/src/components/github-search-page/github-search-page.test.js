@@ -272,7 +272,7 @@ describe('when the developer does a search and selects 50 rows per page', () => 
   }, 10000)
 })
 
-describe.only('when the developer clicks on search and then on next page button', () => {
+describe('when the developer clicks on search and then on next page button', () => {
   it('must display the next repositories page', async () => {
     // config server handler
     server.use(rest.get('/search/repositories', handlerPaginated))
@@ -294,6 +294,16 @@ describe.only('when the developer clicks on search and then on next page button'
 
     // wait search button is not disabled
     expect(screen.getByRole('button', {name: /search/i})).toBeDisabled()
+
+    await waitFor(
+      () =>
+        expect(
+          screen.getByRole('button', {name: /search/i}),
+        ).not.toBeDisabled(),
+      {timeout: 3000},
+    )
+
     // expect first repo name is from page 1
-  })
+    expect(screen.getByRole('cell', {name: /2-0/})).toBeInTheDocument()
+  }, 10000)
 })
