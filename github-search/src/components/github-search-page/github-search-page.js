@@ -85,7 +85,7 @@ export const GithubSearchPage = () => {
             <TablePagination
               rowsPerPageOptions={[30, 50, 100]}
               component="div"
-              count={1}
+              count={1000}
               rowsPerPage={rowsPerPage}
               page={0}
               onChangePage={() => {}}
