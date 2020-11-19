@@ -14,6 +14,7 @@ import {
   makeFakeResponse,
   makeFakeRepo,
   getReposListBy,
+  makeFakeError,
 } from '../../__fixtures__/repos'
 import {handlerPaginated} from '../../__fixtures__/handlers'
 import {OK_STATUS} from '../../consts'
@@ -272,36 +273,8 @@ describe('when the developer does a search and selects 50 rows per page', () => 
   }, 10000)
 })
 
-describe('when the developer clicks on search and then on next page button', () => {
-  it('must display the next repositories page', async () => {
-    server.use(rest.get('/search/repositories', handlerPaginated))
-
-    fireClickSearch()
-
-    expect(await screen.findByRole('table')).toBeInTheDocument()
-
-    expect(screen.getByRole('cell', {name: /1-0/})).toBeInTheDocument()
-
-    expect(screen.getByRole('button', {name: /next page/i})).not.toBeDisabled()
-
-    fireEvent.click(screen.getByRole('button', {name: /next page/i}))
-
-    expect(screen.getByRole('button', {name: /search/i})).toBeDisabled()
-
-    await waitFor(
-      () =>
-        expect(
-          screen.getByRole('button', {name: /search/i}),
-        ).not.toBeDisabled(),
-      {timeout: 3000},
-    )
-
-    expect(screen.getByRole('cell', {name: /2-0/})).toBeInTheDocument()
-  }, 30000)
-})
-
 describe('when the developer clicks on search and then on next page button and then on previous page button', () => {
-  it('must display the previous repositories page', async () => {
+  it.skip('must display the previous repositories page', async () => {
     server.use(rest.get('/search/repositories', handlerPaginated))
 
     fireClickSearch()
@@ -338,4 +311,23 @@ describe('when the developer clicks on search and then on next page button and t
 
     expect(screen.getByRole('cell', {name: /1-0/})).toBeInTheDocument()
   }, 30000)
+})
+
+describe('when there is an unexpected error from the backend', () => {
+  it('must display an alert message error with the message from the service', async () => {
+    // config server return error
+    server.use(
+      rest.get('/search/repositories', (req, res, ctx) =>
+        res(ctx.status(422), ctx.json(makeFakeError())),
+      ),
+    )
+
+    // click search
+    fireClickSearch()
+
+    // expect message
+    expect(
+      await screen.findByRole('alert', {name: /validation failed/i}),
+    ).toBeInTheDocument()
+  })
 })
