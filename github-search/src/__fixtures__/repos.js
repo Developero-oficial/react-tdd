@@ -6,8 +6,8 @@ export const makeFakeResponse = ({totalCount = 0} = {}) => ({
   items: [],
 })
 
-export const makeFakeError = () => ({
-  message: 'Validation Failed',
+export const makeFakeError = ({message = 'Validation Failed'} = {}) => ({
+  message,
 })
 
 export const makeFakeRepo = ({

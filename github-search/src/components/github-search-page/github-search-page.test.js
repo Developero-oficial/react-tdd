@@ -17,7 +17,7 @@ import {
   makeFakeError,
 } from '../../__fixtures__/repos'
 import {handlerPaginated} from '../../__fixtures__/handlers'
-import {OK_STATUS} from '../../consts'
+import {OK_STATUS, UNEXPECTED_STATUS, UNPROCESSABLE_STATUS} from '../../consts'
 
 const fakeResponse = makeFakeResponse({totalCount: 1})
 
@@ -274,7 +274,7 @@ describe('when the developer does a search and selects 50 rows per page', () => 
 })
 
 describe('when the developer clicks on search and then on next page button and then on previous page button', () => {
-  it.skip('must display the previous repositories page', async () => {
+  it('must display the previous repositories page', async () => {
     server.use(rest.get('/search/repositories', handlerPaginated))
 
     fireClickSearch()
@@ -313,19 +313,37 @@ describe('when the developer clicks on search and then on next page button and t
   }, 30000)
 })
 
-describe('when there is an unexpected error from the backend', () => {
+describe('when there is an Unprocessable Entity from the backend', () => {
   it('must display an alert message error with the message from the service', async () => {
-    // config server return error
+    expect(screen.queryByText(/validation failed/i)).not.toBeInTheDocument()
+
     server.use(
       rest.get('/search/repositories', (req, res, ctx) =>
-        res(ctx.status(422), ctx.json(makeFakeError())),
+        res(ctx.status(UNPROCESSABLE_STATUS), ctx.json(makeFakeError())),
       ),
     )
 
-    // click search
     fireClickSearch()
 
-    // expect message
-    expect(await screen.findByText(/validation failed/)).toBeVisible()
+    expect(await screen.findByText(/validation failed/i)).toBeVisible()
+  })
+})
+
+describe('when there is an unexpected error from the backend', () => {
+  it('must display an alert message error with the message from the service', async () => {
+    expect(screen.queryByText(/unexpected error/i)).not.toBeInTheDocument()
+
+    server.use(
+      rest.get('/search/repositories', (req, res, ctx) =>
+        res(
+          ctx.status(UNEXPECTED_STATUS),
+          ctx.json(makeFakeError({message: 'Unexpected Error'})),
+        ),
+      ),
+    )
+
+    fireClickSearch()
+
+    expect(await screen.findByText(/unexpected error/i)).toBeVisible()
   })
 })
