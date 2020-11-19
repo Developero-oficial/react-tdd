@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import TablePagination from '@material-ui/core/TablePagination'
+import Snackbar from '@material-ui/core/Snackbar'
 
 import {Content} from '../content'
 import {GithubTable} from '../github-table'
@@ -22,24 +23,34 @@ export const GithubSearchPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(ROWS_PER_PAGE_DEFAULT)
   const [currentPage, setCurrentPage] = useState(INITIAL_CURRENT_PAGE)
   const [totalCount, setTotalCount] = useState(INITIAL_TOTAL_COUNT)
+  const [isOpen, setIsOpen] = useState(false)
 
   const didMount = useRef(false)
   const searchByInput = useRef(null)
 
   const handleSearch = useCallback(async () => {
-    setIsSearching(true)
-    const response = await getRepos({
-      q: searchByInput.current.value,
-      rowsPerPage,
-      currentPage,
-    })
+    try {
+      setIsSearching(true)
+      const response = await getRepos({
+        q: searchByInput.current.value,
+        rowsPerPage,
+        currentPage,
+      })
 
-    const data = await response.json()
+      if (!response.ok) {
+        throw response
+      }
 
-    setReposList(data.items)
-    setTotalCount(data.total_count)
-    setIsSearchApplied(true)
-    setIsSearching(false)
+      const data = await response.json()
+
+      setReposList(data.items)
+      setTotalCount(data.total_count)
+      setIsSearchApplied(true)
+    } catch (err) {
+      setIsOpen(true)
+    } finally {
+      setIsSearching(false)
+    }
   }, [rowsPerPage, currentPage])
 
   const handleChangeRowsPerPage = ({target: {value}}) => setRowsPerPage(value)
@@ -104,6 +115,17 @@ export const GithubSearchPage = () => {
           </>
         </Content>
       </Box>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        open={isOpen}
+        autoHideDuration={6000}
+        onClose={() => setIsOpen(false)}
+        message="validation failed"
+      />
     </Container>
   )
 }

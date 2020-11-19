@@ -326,8 +326,6 @@ describe('when there is an unexpected error from the backend', () => {
     fireClickSearch()
 
     // expect message
-    expect(
-      await screen.findByRole('alert', {name: /validation failed/i}),
-    ).toBeInTheDocument()
+    expect(await screen.findByText(/validation failed/)).toBeVisible()
   })
 })
