@@ -53,7 +53,10 @@ export const LoginPage = () => {
   const handleBlurPassword = () => {
     if (!validatePassword(formValues.password)) {
       setPasswordValidationMessage(passwordValidationsMsg)
+      return
     }
+
+    setPasswordValidationMessage('')
   }
 
   return (
