@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const passwordValidationsMsg =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
@@ -69,6 +70,7 @@ export const LoginPage = () => {
   return (
     <>
       <h1>Login Page</h1>
+      {isFetching && <CircularProgress data-testid="loading-indicator" />}
       <form onSubmit={handleSubmit}>
         <TextField
           label="email"
