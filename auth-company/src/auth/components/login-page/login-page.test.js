@@ -1,14 +1,24 @@
 import React from 'react'
 import {screen, render, fireEvent} from '@testing-library/react'
+import {setupServer} from 'msw/node'
 
 import {LoginPage} from './login-page'
+import {handlers} from '../../../mocks/handlers'
 
 const passwordValidationMessage =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
 
 const getPasswordInput = () => screen.getByLabelText(/password/i)
 
+const server = setupServer(...handlers)
+
 beforeEach(() => render(<LoginPage />))
+
+beforeAll(() => server.listen())
+
+afterEach(() => server.resetHandlers())
+
+afterAll(() => server.close())
 
 describe('when login page is mounted', () => {
   it('must display the login title', () => {
