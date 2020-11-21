@@ -3,6 +3,11 @@ import {screen, render, fireEvent} from '@testing-library/react'
 
 import {LoginPage} from './login-page'
 
+const passwordValidationMessage =
+  'The password must contain at least 8 characters, one upper case letter, one number and one special character'
+
+const getPasswordInput = () => screen.getByLabelText(/password/i)
+
 beforeEach(() => render(<LoginPage />))
 
 describe('when login page is mounted', () => {
@@ -66,5 +71,61 @@ describe('when the user fills and blur the email input with invalid email, and t
     expect(
       screen.queryByText(/the email is invalid. Example: john.doe@mail.com"/i),
     ).not.toBeInTheDocument()
+  })
+})
+
+describe('when the user fills and blur the password input with a value with 7 character length', () => {
+  it(`must display the validation message "The password must contain at least 8 characters,
+  one upper case letter, one number and one special character"`, () => {
+    const passwordSevenLengthVal = 'asdfghj'
+
+    fireEvent.change(getPasswordInput(), {
+      target: {value: passwordSevenLengthVal},
+    })
+    fireEvent.blur(getPasswordInput())
+
+    expect(screen.getByText(passwordValidationMessage)).toBeInTheDocument()
+  })
+})
+
+describe('when the user fills and blur the password input with a value without one upper case character', () => {
+  it(`must display the validation message "The password must contain at least 8 characters,
+  one upper case letter, one number and one special character"`, () => {
+    const passwordWithoutUpperCaseVal = 'asdfghj8'
+
+    fireEvent.change(getPasswordInput(), {
+      target: {value: passwordWithoutUpperCaseVal},
+    })
+    fireEvent.blur(getPasswordInput())
+
+    expect(screen.getByText(passwordValidationMessage)).toBeInTheDocument()
+  })
+})
+
+describe('when the user fills and blur the password input with a value without one number', () => {
+  it(`must display the validation message "The password must contain at least 8 characters,
+  one upper case letter, one number and one special character"`, () => {
+    const passwordWithoutNumb = 'asdfghjA'
+
+    fireEvent.change(getPasswordInput(), {
+      target: {value: passwordWithoutNumb},
+    })
+    fireEvent.blur(getPasswordInput())
+
+    expect(screen.getByText(passwordValidationMessage)).toBeInTheDocument()
+  })
+})
+
+describe('when the user fills and blur the password input with a value without one special character', () => {
+  it(`must display the validation message "The password must contain at least 8 characters,
+  one upper case letter, one number and one special character"`, () => {
+    const passwordWithoutSpecialChar = 'asdfghjA1a'
+
+    fireEvent.change(getPasswordInput(), {
+      target: {value: passwordWithoutSpecialChar},
+    })
+    fireEvent.blur(getPasswordInput())
+
+    expect(screen.getByText(passwordValidationMessage)).toBeInTheDocument()
   })
 })
