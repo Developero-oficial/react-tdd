@@ -139,3 +139,13 @@ then change with valid value and blur again`, () => {
     ).not.toBeInTheDocument()
   })
 })
+
+describe('when the user submit the login form with valid data', () => {
+  it.todo(
+    'must disable the submit button while the form page is fetching the data',
+  )
+
+  it.todo(
+    'must be a loading indicator at the top of the form while it is fetching',
+  )
+})
