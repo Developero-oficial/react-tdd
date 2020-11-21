@@ -3,6 +3,8 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
+import {login} from '../../services'
+
 const passwordValidationsMsg =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
 
@@ -24,8 +26,7 @@ export const LoginPage = () => {
   const [formValues, setFormValues] = useState({email: '', password: ''})
   const [isFetching, setIsFetching] = useState(false)
 
-  const handleSubmit = async e => {
-    e.preventDefault()
+  const validateForm = () => {
     const {email, password} = formValues
 
     const isEmailEmpty = !email
@@ -39,13 +40,19 @@ export const LoginPage = () => {
       setPasswordValidationMessage('The password is required')
     }
 
-    if (isEmailEmpty || isPasswordEmpty) {
+    return isEmailEmpty || isPasswordEmpty
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault()
+
+    if (validateForm()) {
       return
     }
 
     setIsFetching(true)
 
-    await fetch('/login', {method: 'POST'})
+    await login()
 
     setIsFetching(false)
   }
