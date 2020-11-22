@@ -3,6 +3,12 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Snackbar from '@material-ui/core/Snackbar'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Avatar from '@material-ui/core/Avatar'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Typography from '@material-ui/core/Typography'
+import {makeStyles} from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
 
 import {login} from '../../services'
 
@@ -21,7 +27,28 @@ const validatePassword = password => {
   return passwordRulesRegex.test(password)
 }
 
+const useStyles = makeStyles(theme => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}))
+
 export const LoginPage = () => {
+  const classes = useStyles()
   const [emailValidationMessage, setEmailValidationMessage] = useState('')
   const [passwordValidationMessage, setPasswordValidationMessage] = useState('')
   const [formValues, setFormValues] = useState({email: '', password: ''})
@@ -98,44 +125,69 @@ export const LoginPage = () => {
   const handleClose = () => setIsOpen(false)
 
   return (
-    <>
-      <h1>Login Page</h1>
-      {isFetching && <CircularProgress data-testid="loading-indicator" />}
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="email"
-          id="email"
-          name="email"
-          helperText={emailValidationMessage}
-          onChange={handleChange}
-          onBlur={handleBlurEmail}
-          value={formValues.email}
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Login Page
+        </Typography>
+        {isFetching && <CircularProgress data-testid="loading-indicator" />}
+        <form onSubmit={handleSubmit} className={classes.form}>
+          <TextField
+            label="email"
+            id="email"
+            name="email"
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            helperText={emailValidationMessage}
+            onChange={handleChange}
+            onBlur={handleBlurEmail}
+            value={formValues.email}
+            error={!!emailValidationMessage}
+          />
+          <TextField
+            label="password"
+            id="password"
+            type="password"
+            name="password"
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            helperText={passwordValidationMessage}
+            onChange={handleChange}
+            onBlur={handleBlurPassword}
+            value={formValues.password}
+            error={!!passwordValidationMessage}
+          />
+          <Button
+            disabled={isFetching}
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Send
+          </Button>
+        </form>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          open={isOpen}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message={errorMessage}
         />
-        <TextField
-          label="password"
-          id="password"
-          type="password"
-          name="password"
-          helperText={passwordValidationMessage}
-          onChange={handleChange}
-          onBlur={handleBlurPassword}
-          value={formValues.password}
-        />
-        <Button disabled={isFetching} type="submit">
-          Send
-        </Button>
-      </form>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        open={isOpen}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message={errorMessage}
-      />
-    </>
+      </div>
+    </Container>
   )
 }
 
