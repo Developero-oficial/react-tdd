@@ -12,6 +12,8 @@ import {rest} from 'msw'
 import {LoginPage} from './login-page'
 import {handlers} from '../../../mocks/handlers'
 
+const HTTP_UNEXPECTED_ERROR_STATUS = 500
+
 const passwordValidationMessage =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
 
@@ -199,22 +201,23 @@ describe('when the user submit the login form with valid data', () => {
 
 describe('when the user submit the login form with valid data and there is an unexpected server error', () => {
   it('must display the error message "Unexpected error, please try again" from the api', async () => {
-    // setup - config server
     server.use(
       rest.post('/login', (req, res, ctx) =>
         res(
-          ctx.status(500),
+          ctx.status(HTTP_UNEXPECTED_ERROR_STATUS),
           ctx.json({message: 'Unexpected error, please try again'}),
         ),
       ),
     )
 
-    // trigger submit form
+    expect(
+      screen.queryByText(/unexpected error, please try again/i),
+    ).not.toBeInTheDocument()
+
     fillInputsWithValidValues()
 
     fireEvent.click(getSendButton())
 
-    // expect display message error
     expect(
       await screen.findByText(/unexpected error, please try again/i),
     ).toBeInTheDocument()
