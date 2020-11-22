@@ -13,6 +13,8 @@ import {LoginPage} from './login-page'
 import {handlers} from '../../../mocks/handlers'
 
 const HTTP_UNEXPECTED_ERROR_STATUS = 500
+const HTTP_INVALID_CREDENTIALS_STATUS = 401
+const HTTP_OK_STATUS = 200
 
 const passwordValidationMessage =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
@@ -21,12 +23,15 @@ const getPasswordInput = () => screen.getByLabelText(/password/i)
 
 const getSendButton = () => screen.getByRole('button', {name: /send/i})
 
-const fillInputsWithValidValues = () => {
+const fillInputs = ({
+  email = 'john.doe@test.com',
+  password = 'Aa123456789!@#',
+} = {}) => {
   fireEvent.change(screen.getByLabelText(/email/i), {
-    target: {value: 'john.doe@test.com'},
+    target: {value: email},
   })
   fireEvent.change(screen.getByLabelText(/password/i), {
-    target: {value: 'Aa123456789!@#'},
+    target: {value: password},
   })
 }
 
@@ -70,7 +75,7 @@ describe('when the user leaves empty fields and clicks the submit button', () =>
 
 describe('when the user fills the fields and clicks the submit button', () => {
   it('must not display the required messages', async () => {
-    fillInputsWithValidValues()
+    fillInputs()
 
     fireEvent.click(getSendButton())
 
@@ -175,7 +180,7 @@ then change with valid value and blur again`, () => {
 
 describe('when the user submit the login form with valid data', () => {
   it('must disable the submit button while the form page is fetching the data', async () => {
-    fillInputsWithValidValues()
+    fillInputs()
 
     fireEvent.click(getSendButton())
 
@@ -187,7 +192,7 @@ describe('when the user submit the login form with valid data', () => {
   it('must be a loading indicator at the top of the form while it is fetching', async () => {
     expect(screen.queryByTestId('loading-indicator')).not.toBeInTheDocument()
 
-    fillInputsWithValidValues()
+    fillInputs()
 
     fireEvent.click(getSendButton())
 
@@ -214,7 +219,7 @@ describe('when the user submit the login form with valid data and there is an un
       screen.queryByText(/unexpected error, please try again/i),
     ).not.toBeInTheDocument()
 
-    fillInputsWithValidValues()
+    fillInputs()
 
     fireEvent.click(getSendButton())
 
@@ -225,7 +230,30 @@ describe('when the user submit the login form with valid data and there is an un
 })
 
 describe('when the user submit the login form with valid data and there is an invalid credentials error', () => {
-  it.todo(
-    'must display the error message "The email or password are not correct" from the api',
-  )
+  it('must display the error message "The email or password are not correct" from the api', async () => {
+    // setup server
+    server.use(
+      rest.post('/login', (req, res, ctx) => {
+        const {email, password} = req.body
+
+        if (email === 'wrong@mail.com' && password === 'Aa12345678$') {
+          return res(
+            ctx.status(HTTP_INVALID_CREDENTIALS_STATUS),
+            ctx.json({message: 'The email or password are not correct'}),
+          )
+        }
+
+        return res(ctx.status(HTTP_OK_STATUS))
+      }),
+    )
+
+    // trigger - submit form
+    fillInputs({email: 'wrong@mail.com', password: 'Aa12345678$'})
+    fireEvent.click(getSendButton())
+
+    // expects error message
+    expect(
+      await screen.findByText(/the email or password are not correct/i),
+    ).toBeInTheDocument()
+  })
 })
