@@ -19,5 +19,15 @@ describe('when the user is not authenticated and enters on admin page', () => {
 })
 
 describe('when the user is not authenticated and enters on employee page', () => {
-  it.todo('must be redirected to login page')
+  it('must be redirected to login page', () => {
+    window.history.pushState({}, '', '/employee')
+
+    render(
+      <Router>
+        <AppRouter />
+      </Router>,
+    )
+
+    expect(screen.getByText(/login page/i)).toBeInTheDocument()
+  })
 })
