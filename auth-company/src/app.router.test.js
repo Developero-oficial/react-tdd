@@ -1,18 +1,12 @@
 import React from 'react'
-import {screen, render} from '@testing-library/react'
-import {BrowserRouter as Router} from 'react-router-dom'
+import {screen} from '@testing-library/react'
 
+import {renderWithRouter} from './utils/tests'
 import {AppRouter} from './app-router'
 
 describe('when the user is not authenticated and enters on admin page', () => {
   it('must be redirected to login page', () => {
-    window.history.pushState({}, '', '/admin')
-
-    render(
-      <Router>
-        <AppRouter />
-      </Router>,
-    )
+    renderWithRouter(<AppRouter />, {route: '/admin'})
 
     expect(screen.getByText(/login page/i)).toBeInTheDocument()
   })
@@ -20,13 +14,7 @@ describe('when the user is not authenticated and enters on admin page', () => {
 
 describe('when the user is not authenticated and enters on employee page', () => {
   it('must be redirected to login page', () => {
-    window.history.pushState({}, '', '/employee')
-
-    render(
-      <Router>
-        <AppRouter />
-      </Router>,
-    )
+    renderWithRouter(<AppRouter />, {route: '/employee'})
 
     expect(screen.getByText(/login page/i)).toBeInTheDocument()
   })
