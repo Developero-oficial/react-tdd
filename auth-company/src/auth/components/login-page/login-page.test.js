@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   screen,
-  render,
   fireEvent,
   waitFor,
   waitForElementToBeRemoved,
@@ -12,6 +11,7 @@ import {rest} from 'msw'
 import {LoginPage} from './login-page'
 import {handlers, handlerInvalidCredentials} from '../../../mocks/handlers'
 import {HTTP_UNEXPECTED_ERROR_STATUS} from '../../../consts'
+import {renderWithRouter} from '../../../utils/tests'
 
 const passwordValidationMessage =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
@@ -34,7 +34,7 @@ const fillInputs = ({
 
 const server = setupServer(...handlers)
 
-beforeEach(() => render(<LoginPage />))
+beforeEach(() => renderWithRouter(<LoginPage />))
 
 beforeAll(() => server.listen())
 

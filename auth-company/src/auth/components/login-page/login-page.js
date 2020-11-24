@@ -13,6 +13,8 @@ import Container from '@material-ui/core/Container'
 
 import {login} from '../../services'
 
+import {ADMIN_ROLE} from '../../../consts'
+
 const passwordValidationsMsg =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
 
@@ -131,7 +133,7 @@ export const LoginPage = () => {
 
   const handleClose = () => setIsOpen(false)
 
-  if (user.role) {
+  if (!isFetching && user.role === ADMIN_ROLE) {
     return <Redirect to="/admin" />
   }
 
