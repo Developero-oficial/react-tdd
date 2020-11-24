@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import PropTypes from 'prop-types'
 import {Redirect} from 'react-router-dom'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
@@ -50,7 +51,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const LoginPage = () => {
+export const LoginPage = ({onSuccessLogin}) => {
   const classes = useStyles()
   const [emailValidationMessage, setEmailValidationMessage] = useState('')
   const [passwordValidationMessage, setPasswordValidationMessage] = useState('')
@@ -98,6 +99,7 @@ export const LoginPage = () => {
         user: {role},
       } = await response.json()
       setUser({role})
+      onSuccessLogin()
     } catch (err) {
       const data = await err.json()
       setErrorMessage(data.message)
@@ -202,6 +204,14 @@ export const LoginPage = () => {
       </div>
     </Container>
   )
+}
+
+LoginPage.propTypes = {
+  onSuccessLogin: PropTypes.func,
+}
+
+LoginPage.defaultProps = {
+  onSuccessLogin: () => {},
 }
 
 export default {LoginPage}

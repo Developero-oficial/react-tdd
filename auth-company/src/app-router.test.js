@@ -56,7 +56,7 @@ describe('when the admin is authenticated in login page', () => {
   it('must be redirected to admin page', async () => {
     renderWithRouter(<AppRouter />)
 
-    fillInputs()
+    fillInputs({email: 'admin@mail.com'})
 
     fireEvent.click(getSendButton())
 
