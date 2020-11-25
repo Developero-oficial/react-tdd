@@ -22,12 +22,12 @@ export const AppRouter = ({isAuth}) => {
     <AuthContext.Provider value={authProviderValue}>
       <Switch>
         <Route path="/" exact>
-          <LoginPage onSuccessLogin={handleSuccessLogin} />
+          <LoginPage />
         </Route>
-        <PrivateRoute path="/admin" isAuth={isUserAuth}>
+        <PrivateRoute path="/admin">
           <AdminPage />
         </PrivateRoute>
-        <PrivateRoute path="/employee" isAuth={isUserAuth}>
+        <PrivateRoute path="/employee">
           <EmployeePage />
         </PrivateRoute>
       </Switch>
