@@ -12,6 +12,7 @@ import {LoginPage} from './login-page'
 import {handlers, handlerInvalidCredentials} from '../../../mocks/handlers'
 import {HTTP_UNEXPECTED_ERROR_STATUS} from '../../../consts'
 import {renderWithRouter} from '../../../utils/tests'
+import {AuthContext} from '../../../utils/contexts/auth-context'
 
 const passwordValidationMessage =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
@@ -34,7 +35,13 @@ const fillInputs = ({
 
 const server = setupServer(...handlers)
 
-beforeEach(() => renderWithRouter(<LoginPage />))
+beforeEach(() =>
+  renderWithRouter(
+    <AuthContext.Provider value={{handleSuccessLogin: jest.fn()}}>
+      <LoginPage />
+    </AuthContext.Provider>,
+  ),
+)
 
 beforeAll(() => server.listen())
 
