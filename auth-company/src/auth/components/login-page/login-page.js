@@ -1,5 +1,4 @@
-import React, {useState} from 'react'
-import PropTypes from 'prop-types'
+import React, {useState, useContext} from 'react'
 import {Redirect} from 'react-router-dom'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
@@ -15,6 +14,7 @@ import Container from '@material-ui/core/Container'
 import {login} from '../../services'
 
 import {ADMIN_ROLE} from '../../../consts'
+import {AuthContext} from '../../../utils/contexts/auth-context'
 
 const passwordValidationsMsg =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
@@ -51,8 +51,9 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const LoginPage = ({onSuccessLogin}) => {
+export const LoginPage = () => {
   const classes = useStyles()
+  const {handleSuccessLogin} = useContext(AuthContext)
   const [emailValidationMessage, setEmailValidationMessage] = useState('')
   const [passwordValidationMessage, setPasswordValidationMessage] = useState('')
   const [formValues, setFormValues] = useState({email: '', password: ''})
@@ -99,7 +100,7 @@ export const LoginPage = ({onSuccessLogin}) => {
         user: {role},
       } = await response.json()
       setUser({role})
-      onSuccessLogin()
+      handleSuccessLogin()
     } catch (err) {
       const data = await err.json()
       setErrorMessage(data.message)
@@ -204,14 +205,6 @@ export const LoginPage = ({onSuccessLogin}) => {
       </div>
     </Container>
   )
-}
-
-LoginPage.propTypes = {
-  onSuccessLogin: PropTypes.func,
-}
-
-LoginPage.defaultProps = {
-  onSuccessLogin: () => {},
 }
 
 export default {LoginPage}
