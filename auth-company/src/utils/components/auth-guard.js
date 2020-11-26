@@ -7,8 +7,8 @@ export const AuthGuard = ({children, isAuth}) => {
   const [isUserAuth, setIsUserAuth] = useState(isAuth)
   const [user, setUser] = useState({role: '', username: ''})
 
-  const handleSuccessLogin = ({role}) => {
-    setUser({role})
+  const handleSuccessLogin = ({role, username}) => {
+    setUser({role, username})
     setIsUserAuth(true)
   }
 
