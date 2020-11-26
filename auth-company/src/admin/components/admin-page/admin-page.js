@@ -1,5 +1,15 @@
-import React from 'react'
+import React, {useContext} from 'react'
 
-export const AdminPage = () => <h1>Admin page</h1>
+import {AuthContext} from '../../../utils/contexts/auth-context'
+
+export const AdminPage = () => {
+  const {user} = useContext(AuthContext)
+  return (
+    <>
+      <h1>Admin page</h1>
+      <p>{user.username}</p>
+    </>
+  )
+}
 
 export default {AdminPage}
