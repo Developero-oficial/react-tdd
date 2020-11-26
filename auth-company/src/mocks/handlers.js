@@ -5,6 +5,8 @@ import {
   HTTP_OK_STATUS,
   ADMIN_ROLE,
   EMPLOYEE_ROLE,
+  ADMIN_EMAIL,
+  EMPLOYEE_EMAIL,
 } from '../consts'
 
 export const handlers = [
@@ -14,11 +16,11 @@ export const handlers = [
 
     const {email} = req.body
 
-    if (email === 'admin@mail.com') {
+    if (email === ADMIN_EMAIL) {
       role = ADMIN_ROLE
     }
 
-    if (email === 'employee@mail.com') {
+    if (email === EMPLOYEE_EMAIL) {
       role = EMPLOYEE_ROLE
     }
 
