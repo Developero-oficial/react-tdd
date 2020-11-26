@@ -23,7 +23,9 @@ const server = setupServer(...handlers)
 
 beforeEach(() =>
   renderWithRouter(
-    <AuthContext.Provider value={{handleSuccessLogin: jest.fn()}}>
+    <AuthContext.Provider
+      value={{handleSuccessLogin: jest.fn(), user: {role: ''}}}
+    >
       <LoginPage />
     </AuthContext.Provider>,
   ),
