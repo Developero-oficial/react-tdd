@@ -11,27 +11,13 @@ import {rest} from 'msw'
 import {LoginPage} from './login-page'
 import {handlers, handlerInvalidCredentials} from '../../../mocks/handlers'
 import {HTTP_UNEXPECTED_ERROR_STATUS} from '../../../consts'
-import {renderWithRouter} from '../../../utils/tests'
+import {renderWithRouter, fillInputs, getSendButton} from '../../../utils/tests'
 import {AuthContext} from '../../../utils/contexts/auth-context'
 
 const passwordValidationMessage =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
 
 const getPasswordInput = () => screen.getByLabelText(/password/i)
-
-const getSendButton = () => screen.getByRole('button', {name: /send/i})
-
-const fillInputs = ({
-  email = 'john.doe@test.com',
-  password = 'Aa123456789!@#',
-} = {}) => {
-  fireEvent.change(screen.getByLabelText(/email/i), {
-    target: {value: email},
-  })
-  fireEvent.change(screen.getByLabelText(/password/i), {
-    target: {value: password},
-  })
-}
 
 const server = setupServer(...handlers)
 
