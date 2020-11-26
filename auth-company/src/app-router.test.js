@@ -69,3 +69,15 @@ describe('when the admin goes to employees page', () => {
     expect(screen.getByText(/^employee page/i)).toBeInTheDocument()
   })
 })
+
+describe('when the employee is authenticated in login page', () => {
+  it('must be redirected to employee page', async () => {
+    renderWithAuthProvider(<AppRouter />)
+
+    fillInputs({email: 'employee@mail.com'})
+
+    fireEvent.click(getSendButton())
+
+    expect(await screen.findByText(/employee page/i)).toBeInTheDocument()
+  })
+})

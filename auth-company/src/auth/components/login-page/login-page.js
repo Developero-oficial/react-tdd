@@ -13,12 +13,13 @@ import Container from '@material-ui/core/Container'
 
 import {login} from '../../services'
 
-import {ADMIN_ROLE} from '../../../consts'
+import {ADMIN_ROLE, EMPLOYEE_ROLE} from '../../../consts'
 import {AuthContext} from '../../../utils/contexts/auth-context'
 
 const passwordValidationsMsg =
   'The password must contain at least 8 characters, one upper case letter, one number and one special character'
 
+// TODO: move this to another file
 const validateEmail = email => {
   const regex = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
 
@@ -136,6 +137,10 @@ export const LoginPage = () => {
 
   if (!isFetching && user.role === ADMIN_ROLE) {
     return <Redirect to="/admin" />
+  }
+
+  if (!isFetching && user.role === EMPLOYEE_ROLE) {
+    return <Redirect to="/employee" />
   }
 
   return (
