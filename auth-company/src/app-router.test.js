@@ -64,8 +64,8 @@ describe('when the admin goes to employees page', () => {
     goTo('/admin')
     renderWithAuthProvider(<AppRouter />, {isAuth: true})
 
-    fireEvent.click(screen.getByText(/employees/i))
+    fireEvent.click(screen.getByText(/employee/i))
 
-    expect(screen.getByText(/^employees page/i)).toBeInTheDocument()
+    expect(screen.getByText(/^employee page/i)).toBeInTheDocument()
   })
 })
