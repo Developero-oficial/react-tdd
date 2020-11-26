@@ -1,4 +1,5 @@
 import React from 'react'
+import {BrowserRouter as Router} from 'react-router-dom'
 import {render, screen} from '@testing-library/react'
 
 import {EmployeePage} from './employee-page'
@@ -10,6 +11,7 @@ const renderWith = ({role, username = 'John Doe'}) =>
     <AuthContext.Provider value={{user: {username, role}}}>
       <EmployeePage />
     </AuthContext.Provider>,
+    {wrapper: Router},
   )
 
 describe('when the admin access to employee page', () => {
