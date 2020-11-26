@@ -1,15 +1,20 @@
 import React, {useContext} from 'react'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
 
 import {AuthContext} from '../../../utils/contexts/auth-context'
+import {ADMIN_ROLE} from '../../../consts'
 
 export const EmployeePage = () => {
   const {user} = useContext(AuthContext)
 
   return (
     <>
-      <h1>Employee page</h1>
+      <Typography component="h1" variant="h5">
+        Employee page
+      </Typography>
 
-      {user.role === 'admin' && <button type="button">Delete</button>}
+      {user.role === ADMIN_ROLE && <Button type="button">Delete</Button>}
     </>
   )
 }
