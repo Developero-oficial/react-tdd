@@ -2,7 +2,7 @@ import React from 'react'
 import {screen, fireEvent} from '@testing-library/react'
 import {setupServer} from 'msw/node'
 
-import {renderWithRouter} from './utils/tests'
+import {renderWithAuthProvider, goTo} from './utils/tests'
 import {handlers} from './mocks/handlers'
 import {AppRouter} from './app-router'
 
@@ -30,7 +30,8 @@ afterAll(() => server.close())
 
 describe('when the user is not authenticated and enters on admin page', () => {
   it('must be redirected to login page', () => {
-    renderWithRouter(<AppRouter />, {route: '/admin'})
+    goTo('/admin')
+    renderWithAuthProvider(<AppRouter />)
 
     expect(screen.getByText(/login page/i)).toBeInTheDocument()
   })
@@ -38,7 +39,8 @@ describe('when the user is not authenticated and enters on admin page', () => {
 
 describe('when the user is not authenticated and enters on employee page', () => {
   it('must be redirected to login page', () => {
-    renderWithRouter(<AppRouter />, {route: '/employee'})
+    goTo('/employee')
+    renderWithAuthProvider(<AppRouter />)
 
     expect(screen.getByText(/login page/i)).toBeInTheDocument()
   })
@@ -46,7 +48,8 @@ describe('when the user is not authenticated and enters on employee page', () =>
 
 describe('when the user is authenticated and enters on admin page', () => {
   it('must be redirected to login page', () => {
-    renderWithRouter(<AppRouter isAuth />, {route: '/admin'})
+    goTo('/admin')
+    renderWithAuthProvider(<AppRouter />, {isAuth: true})
 
     expect(screen.getByText(/admin page/i)).toBeInTheDocument()
   })
@@ -54,7 +57,7 @@ describe('when the user is authenticated and enters on admin page', () => {
 
 describe('when the admin is authenticated in login page', () => {
   it('must be redirected to admin page', async () => {
-    renderWithRouter(<AppRouter />)
+    renderWithAuthProvider(<AppRouter />)
 
     fillInputs({email: 'admin@mail.com'})
 
