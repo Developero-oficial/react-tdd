@@ -1,25 +1,14 @@
-import React, {useState} from 'react'
-import PropTypes from 'prop-types'
-import {Switch, Route} from 'react-router-dom'
+import React from 'react'
+import {Switch, Route, BrowserRouter as Router} from 'react-router-dom'
 
 import {LoginPage} from './auth/components/login-page'
 import {PrivateRoute} from './utils/components/private-route'
-import {AuthContext} from './utils/contexts/auth-context'
 import {AdminPage} from './admin/components/admin-page'
 import {EmployeePage} from './employee/components/employee-page'
 
-export const AppRouter = ({isAuth}) => {
-  const [isUserAuth, setIsUserAuth] = useState(isAuth)
-
-  const handleSuccessLogin = () => setIsUserAuth(true)
-
-  const authProviderValue = {
-    isAuth: isUserAuth,
-    handleSuccessLogin,
-  }
-
+export const AppRouter = () => {
   return (
-    <AuthContext.Provider value={authProviderValue}>
+    <Router>
       <Switch>
         <Route path="/" exact>
           <LoginPage />
@@ -31,16 +20,8 @@ export const AppRouter = ({isAuth}) => {
           <EmployeePage />
         </PrivateRoute>
       </Switch>
-    </AuthContext.Provider>
+    </Router>
   )
-}
-
-AppRouter.propTypes = {
-  isAuth: PropTypes.bool,
-}
-
-AppRouter.defaultProps = {
-  isAuth: false,
 }
 
 export default {
