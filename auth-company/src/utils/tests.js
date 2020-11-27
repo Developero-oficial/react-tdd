@@ -15,7 +15,7 @@ export const renderWithAuthProvider = (
   {isAuth = false, role = ''} = {},
 ) => {
   return render(
-    <AuthGuard isAuth={isAuth} role={role}>
+    <AuthGuard isAuth={isAuth} initialRole={role}>
       {ui}
     </AuthGuard>,
     {
