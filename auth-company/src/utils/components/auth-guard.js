@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 
 import {AuthContext} from '../contexts/auth-context'
 
-export const AuthGuard = ({children, isAuth}) => {
+export const AuthGuard = ({children, isAuth, role}) => {
   const [isUserAuth, setIsUserAuth] = useState(isAuth)
-  const [user, setUser] = useState({role: '', username: ''})
+  const [user, setUser] = useState({role, username: ''})
 
   const handleSuccessLogin = ({role, username}) => {
     setUser({role, username})
@@ -28,10 +28,12 @@ export const AuthGuard = ({children, isAuth}) => {
 AuthGuard.propTypes = {
   children: PropTypes.node.isRequired,
   isAuth: PropTypes.bool,
+  role: PropTypes.string,
 }
 
 AuthGuard.defaultProps = {
   isAuth: false,
+  role: '',
 }
 
 export default {AuthGuard}

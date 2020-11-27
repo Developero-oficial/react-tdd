@@ -10,7 +10,7 @@ import {
 } from './utils/tests'
 import {handlers} from './mocks/handlers'
 import {AppRouter} from './app-router'
-import {ADMIN_EMAIL, EMPLOYEE_EMAIL} from './consts'
+import {ADMIN_EMAIL, EMPLOYEE_EMAIL, EMPLOYEE_ROLE} from './consts'
 
 const server = setupServer(...handlers)
 
@@ -80,5 +80,14 @@ describe('when the employee is authenticated in login page', () => {
     fireEvent.click(getSendButton())
 
     expect(await screen.findByText(/employee page/i)).toBeInTheDocument()
+  })
+})
+
+describe('when the employee goes to admin page', () => {
+  it('must redirect to employee page', () => {
+    goTo('/admin')
+    renderWithAuthProvider(<AppRouter />, {isAuth: true, role: EMPLOYEE_ROLE})
+
+    expect(screen.getByText(/employee page/i)).toBeInTheDocument()
   })
 })
