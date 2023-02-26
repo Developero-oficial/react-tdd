@@ -1,5 +1,13 @@
 # Admin Story | Actions
 
+## As admin, I want to search users by name and email so I can find quickly an user
+
+### Acceptance Criteria:
+
+- When should display a loading state when is fetching the users
+- When the admin type in the search field, the app should filter the users by name and email following the search field value and update the table with the results
+- If there are not users matching with the search, then the app should show the message "There are not users that match with that search"
+
 ## As admin, I want to invite users to my group members so I can grow my group
 
 ### Acceptance Criteria:
