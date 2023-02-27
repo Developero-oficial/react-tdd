@@ -1,0 +1,32 @@
+{
+  "extends": [
+    "react-app",
+    "airbnb",
+    "airbnb-typescript",
+    "plugin:jsx-a11y/recommended",
+    "prettier",
+    "eslint-config-prettier"
+  ],
+  "plugins": ["jsx-a11y", "prettier", "filenames-simple"],
+  "parserOptions": {
+    "project": ["**/tsconfig.json"]
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": "off",
+    "filenames-simple/naming-convention": [
+      "error",
+      {"rule": "kebab-case", "excepts": ["setupTests", "reportWebVitals"]}
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
+  }
+}
