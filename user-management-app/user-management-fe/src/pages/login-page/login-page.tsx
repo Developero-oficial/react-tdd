@@ -1,6 +1,9 @@
 import React from 'react'
 import {Typography, TextField, Button} from '@mui/material'
 import {useForm, SubmitHandler} from 'react-hook-form'
+import {yupResolver} from '@hookform/resolvers/yup'
+
+import {loginSchema} from './login-schema'
 
 interface Inputs {
   email: string
@@ -12,7 +15,9 @@ export function LoginPage() {
     register,
     handleSubmit,
     formState: {errors},
-  } = useForm<Inputs>()
+  } = useForm<Inputs>({
+    resolver: yupResolver(loginSchema),
+  })
 
   const onSubmit: SubmitHandler<Inputs> = data => console.log(data)
 
@@ -24,14 +29,14 @@ export function LoginPage() {
         <TextField
           label="Email"
           {...register('email', {required: true})}
-          helperText={errors.email && 'The email is required'}
+          helperText={errors.email?.message}
         />
 
         <TextField
           label="Password"
           type="password"
           {...register('password', {required: true})}
-          helperText={errors.password && 'The password is required'}
+          helperText={errors.password?.message}
         />
 
         <Button type="submit">Submit</Button>
