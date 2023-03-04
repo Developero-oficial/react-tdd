@@ -17,11 +17,13 @@ test('it should render the form elements', () => {
   expect(screen.getByRole('button', {name: /submit/i})).toBeInTheDocument()
 })
 
-test('it should validate the inputs as required', () => {
+test('it should validate the inputs as required', async () => {
   render(<LoginPage />)
 
   userEvent.click(screen.getByRole('button', {name: /submit/i}))
 
-  expect(screen.getByText(/The email is required/i)).toBeInTheDocument()
-  expect(screen.getByText(/The password is required/i)).toBeInTheDocument()
+  expect(await screen.findByText(/The email is required/i)).toBeInTheDocument()
+  expect(
+    await screen.findByText(/The password is required/i),
+  ).toBeInTheDocument()
 })
