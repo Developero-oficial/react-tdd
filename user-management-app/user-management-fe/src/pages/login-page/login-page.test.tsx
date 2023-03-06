@@ -29,3 +29,13 @@ test('it should validate the inputs as required', async () => {
     await screen.findByText(/The password is required/i),
   ).toBeInTheDocument()
 })
+
+test('it should validate the email format', async () => {
+  render(<LoginPage />)
+
+  userEvent.type(screen.getByLabelText(/email/i), 'invalid email')
+
+  userEvent.click(getSubmitBtn())
+
+  expect(await screen.findByText(/The email is not valid/i)).toBeInTheDocument()
+})
