@@ -39,3 +39,16 @@ test('it should validate the email format', async () => {
 
   expect(await screen.findByText(/The email is not valid/i)).toBeInTheDocument()
 })
+
+test.only('it should disble the submit button while is fetching', async () => {
+  render(<LoginPage />)
+
+  expect(getSubmitBtn()).not.toBeDisabled()
+
+  userEvent.type(screen.getByLabelText(/email/i), 'john.doe@mail.com')
+  userEvent.type(screen.getByLabelText(/password/i), '123456')
+
+  userEvent.click(getSubmitBtn())
+
+  expect(getSubmitBtn()).toBeDisabled()
+})
