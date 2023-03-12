@@ -1,6 +1,7 @@
 {
   "name": "user-management-app",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -61,5 +62,10 @@
     "eslint-plugin-prettier": "^4.2.1",
     "msw": "^1.1.0",
     "prettier": "^2.8.4"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(axios)/)"
+    ]
   }
 }
