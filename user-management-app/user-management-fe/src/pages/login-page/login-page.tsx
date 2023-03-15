@@ -3,6 +3,7 @@ import {Typography, TextField, Button} from '@mui/material'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 
+import {StyledLoadder} from 'components/loader'
 import {loginSchema} from './login-schema'
 import {Inputs} from './login-page.interfaces'
 import {useLoginMutation} from './use-login-mutation'
@@ -24,6 +25,10 @@ export function LoginPage() {
   return (
     <>
       <Typography component="h1">Login</Typography>
+
+      {mutation.isLoading && (
+        <StyledLoadder role="progressbar" aria-label="loading" />
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField

@@ -4,7 +4,10 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
 
+import {queryClient} from 'mocks/render-with-providers'
 import {server} from './mocks/server'
+
+beforeEach(() => queryClient.clear())
 
 beforeAll(() => server.listen())
 
