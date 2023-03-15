@@ -1,18 +1,20 @@
-import {screen, render, waitFor} from '@testing-library/react'
+import React from 'react'
+import {screen, waitFor} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
+import {renderWithProviders} from 'mocks/render-with-providers'
 import {LoginPage} from './login-page'
 
 const getSubmitBtn = () => screen.getByRole('button', {name: /submit/i})
 
 test('it should render the login title', () => {
-  render(<LoginPage />)
+  renderWithProviders(<LoginPage />)
 
   expect(screen.getByRole('heading', {name: /login/i})).toBeInTheDocument()
 })
 
 test('it should render the form elements', () => {
-  render(<LoginPage />)
+  renderWithProviders(<LoginPage />)
 
   expect(screen.getByLabelText(/email/i)).toBeInTheDocument()
   expect(screen.getByLabelText(/password/i)).toBeInTheDocument()
@@ -20,7 +22,7 @@ test('it should render the form elements', () => {
 })
 
 test('it should validate the inputs as required', async () => {
-  render(<LoginPage />)
+  renderWithProviders(<LoginPage />)
 
   await userEvent.click(getSubmitBtn())
 
@@ -31,7 +33,7 @@ test('it should validate the inputs as required', async () => {
 })
 
 test('it should validate the email format', async () => {
-  render(<LoginPage />)
+  renderWithProviders(<LoginPage />)
 
   await userEvent.type(screen.getByLabelText(/email/i), 'invalid email')
 
@@ -41,7 +43,7 @@ test('it should validate the email format', async () => {
 })
 
 test('it should disable the submit button while is fetching', async () => {
-  render(<LoginPage />)
+  renderWithProviders(<LoginPage />)
 
   expect(getSubmitBtn()).not.toBeDisabled()
 
