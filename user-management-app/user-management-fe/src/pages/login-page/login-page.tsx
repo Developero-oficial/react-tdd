@@ -30,6 +30,10 @@ export function LoginPage() {
         <StyledLoadder role="progressbar" aria-label="loading" />
       )}
 
+      {mutation.error && (
+        <Typography>Unexpected error, please try again</Typography>
+      )}
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
           label="Email"
