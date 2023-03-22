@@ -9,9 +9,11 @@ import {LoginPage} from './login-page'
 
 const getSubmitBtn = () => screen.getByRole('button', {name: /submit/i})
 
-const mockServerWithError = () =>
+const mockServerWithError = (statusCode: number) =>
   server.use(
-    rest.post('/login', (req, res, ctx) => res(ctx.delay(1), ctx.status(500))),
+    rest.post('/login', (req, res, ctx) =>
+      res(ctx.delay(1), ctx.status(statusCode)),
+    ),
   )
 
 const fillAndSendLoginForm = async () => {
@@ -79,7 +81,7 @@ test('it should show a loading indicator while is fetching the login', async () 
 })
 
 test('it should display "Unexpected error, please try again" when there is an error from the api login', async () => {
-  mockServerWithError()
+  mockServerWithError(500)
 
   renderWithProviders(<LoginPage />)
 
@@ -87,5 +89,17 @@ test('it should display "Unexpected error, please try again" when there is an er
 
   expect(
     await screen.findByText('Unexpected error, please try again'),
+  ).toBeInTheDocument()
+})
+
+test('it should display "The email or password are not correct" when the credentials are invalid', async () => {
+  mockServerWithError(401)
+
+  renderWithProviders(<LoginPage />)
+
+  await fillAndSendLoginForm()
+
+  expect(
+    await screen.findByText('The email or password are not correct'),
   ).toBeInTheDocument()
 })

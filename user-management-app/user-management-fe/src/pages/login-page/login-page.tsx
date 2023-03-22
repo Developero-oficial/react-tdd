@@ -2,6 +2,7 @@ import React from 'react'
 import {Typography, TextField, Button} from '@mui/material'
 import {useForm, SubmitHandler} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
+import axios from 'axios'
 
 import {StyledLoadder} from 'components/loader'
 import {loginSchema} from './login-schema'
@@ -9,6 +10,7 @@ import {Inputs} from './login-page.interfaces'
 import {useLoginMutation} from './use-login-mutation'
 
 export function LoginPage() {
+  const [errorMessage, setErrorMessage] = React.useState<string>('')
   const mutation = useLoginMutation()
   const {
     register,
@@ -19,7 +21,20 @@ export function LoginPage() {
   })
 
   const onSubmit: SubmitHandler<Inputs> = async ({email, password}) => {
-    mutation.mutate({email, password})
+    mutation.mutate(
+      {email, password},
+      {
+        onError: error => {
+          let internalErrorMessage = 'Unexpected error, please try again'
+
+          if (axios.isAxiosError(error) && error?.response?.status === 401) {
+            internalErrorMessage = 'The email or password are not correct'
+          }
+
+          setErrorMessage(internalErrorMessage)
+        },
+      },
+    )
   }
 
   return (
@@ -30,9 +45,7 @@ export function LoginPage() {
         <StyledLoadder role="progressbar" aria-label="loading" />
       )}
 
-      {mutation.error && (
-        <Typography>Unexpected error, please try again</Typography>
-      )}
+      {mutation.isError ? <Typography>{errorMessage}</Typography> : null}
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
