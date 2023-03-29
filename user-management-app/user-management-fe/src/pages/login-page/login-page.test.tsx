@@ -5,13 +5,14 @@ import {rest} from 'msw'
 
 import {renderWithProviders} from 'mocks/render-with-providers'
 import {server} from 'mocks/server'
+import {baseUrl} from 'config'
 import {LoginPage} from './login-page'
 
 const getSubmitBtn = () => screen.getByRole('button', {name: /submit/i})
 
 const mockServerWithError = (statusCode: number) =>
   server.use(
-    rest.post('/login', (req, res, ctx) =>
+    rest.post(`${baseUrl}/login`, (req, res, ctx) =>
       res(ctx.delay(1), ctx.status(statusCode)),
     ),
   )

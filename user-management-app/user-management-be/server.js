@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const faker = require("@faker-js/faker");
+const cors = require("cors");
 
 const { mockLoginUsers, generateListUsers } = require("./mockUsers");
 
@@ -9,6 +10,7 @@ const secret =
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 function chunk(arr, chunkSize) {

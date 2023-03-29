@@ -7,6 +7,10 @@ import '@testing-library/jest-dom'
 import {queryClient} from 'mocks/render-with-providers'
 import {server} from './mocks/server'
 
+jest.mock('./config', () => ({
+  baseUrl: 'http://mock-server.com',
+}))
+
 beforeEach(() => queryClient.clear())
 
 beforeAll(() => server.listen())
